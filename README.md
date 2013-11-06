@@ -26,3 +26,7 @@ all will allow you to load all the keys in your rustning configuration file.
 hostname will just load that one hostname
 
 rustning setup will generate you a blank configuration file and directory
+
+
+## Future Additions
+* Reverse ssh tunneling / Management of Tunnels
