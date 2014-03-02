@@ -1,0 +1,156 @@
+#!/usr/bin/env php
+<?php
+
+global $keys;
+
+define('DEFAULT_PATH',getenv("HOME"));
+
+function readConfig(){
+    global $keys;
+    if (file_exists(DEFAULT_PATH."/.rustning.conf")){
+        $config = file_get_contents(DEFAULT_PATH."/.rustning.conf");
+        $keys = json_decode($config,true);
+    } else {
+        die("Please run command setup".PHP_EOL);
+    }
+}
+
+function saveConfig(){
+    global $keys;
+    echo "Updating Rustning Configuration".PHP_EOL;
+    $config = json_encode($keys);
+    file_put_contents(DEFAULT_PATH.'/.rustning.conf',$config);
+}
+
+function addKey($hostname, $keyPath){
+    global $keys;
+    if (empty($hostname) || !is_string($hostname)){
+        die("You Must pass a Valid hostname");
+    }
+    if (empty($keyPath) || !is_string($keyPath) || !file_exists($keyPath)){
+        die("You must pass a valid path to the key file and the file has to exist".PHP_EOL);
+    }
+    $keys[$hostname] = array('key' => $keyPath, 'note' => '');
+    saveConfig();
+    exit;
+}
+
+
+function deleteKey($hostname){
+    global $keys;
+    unset($keys[$hostname]);
+    saveConfig();
+    exit;
+}
+
+function listKeys(){
+    global $keys;
+    echo "host\t\t\t\tnotes".PHP_EOL;
+    echo "----\t\t\t\t-----".PHP_EOL;
+    foreach ($keys as $host => $values){
+            echo $host."\t\t".$values['note']."".PHP_EOL;
+    }
+    exit;
+}
+
+function grantAccess($option){
+    global $keys;
+    if ($option == 'all'){
+        foreach ($keys as $host => $values){
+            echo "loading key for ".$host.PHP_EOL;
+            if (file_exists($value['key'])){
+                exec("ssh-add ".$values['key']);
+            } else {
+                echo "Failed to load key for ".$host." the key file is missing.".PHP_EOL;
+            }
+        }
+    } else {
+        echo "loading key for ".$option.PHP_EOL;
+        if (array_key_exists($option, $keys)){
+            if (file_exists($keys[$option]['key'])){
+                exec("ssh-add ".$keys[$option]['key']);
+            } else {
+                die("Key file for the host ".$option." does not exist".PHP_EOL);
+            }
+        } else {
+            die("Theres no host in the configuration file that matches that hostname".PHP_EOL);
+        }
+    }
+}
+
+function addNote($host,$note){
+    global $keys;
+    if (is_string($note) || !empty($note)){
+        $keys[$host]['note'] = $note;
+        saveConfig();
+    } else {
+        die("Note must be a string");
+    }
+}
+
+function setup(){
+    if (!file_exists(DEFAULT_PATH."/.rustning.conf")){
+        touch(DEFAULT_PATH."/.rustning.conf");
+        exit;
+    } else {
+        die("Configuration File already exists! Can't recreate it. Please move out of the way if you want new");
+    }
+}
+
+function usage(){
+    echo "Usage: rustning <command> <args>".PHP_EOL;
+    echo PHP_EOL;
+    echo "Commands".PHP_EOL;
+    echo PHP_EOL;
+    echo "grant-access   - adds the ssh keys to your chain".PHP_EOL;
+    echo "   - accepts all or single hostname".PHP_EOL;
+    echo "add-key <hostname> <path-to-key>".PHP_EOL;
+    echo "   - adds host and key to the rustning configuration files".PHP_EOL;
+    echo "del-key <hostname>".PHP_EOL; 
+    echo "   - remove key from rustning configuration file".PHP_EOL;
+    echo "list-keys".PHP_EOL;
+    echo "   - list all the keys setup for use".PHP_EOL;
+    echo "add-note <hostname> <note>".PHP_EOL;
+    echo "   - add/update note to host entry".PHP_EOL;
+    echo PHP_EOL;
+    exit;
+}
+
+$args = $argv;
+$command =  (count($args) >= 2 ? $args[1] : '');
+$host = (count($args) >= 3 ? $args[2] : '');
+$option = (count($args) >= 4 ? $args[3] : '');
+if ($command != "setup"){
+    readConfig();
+}
+
+switch ($command) {
+
+    case "grant-access":
+        grantAccess();
+        break;
+    
+    case "add-key":
+        addKey($host,$option);
+        break;
+
+    case "del-key":
+        deleteKey($host);
+        break;
+
+    case "list-keys":
+        listKeys();
+        break;
+
+    case "add-note":
+        addNote($host,$option);
+        break;
+
+    case "setup":
+        setup();
+        break;
+
+    default:
+        usage();
+}
+?>

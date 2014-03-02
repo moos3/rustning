@@ -9,13 +9,22 @@ for the ssh-add command that 99.9% of people most likely don't even know about.
 
 
 ## Configuration
-.rustning/conf is a JSON file that has the following layout
+.rustning.conf is a JSON file that has the following layout
 
 {
-  "myserver.example.com":".myserver.example.com.priv",
-  "yourserver.com":".yourserver.com.priv"
+    "ec2-servers": {
+        "key": "/path/to/key",
+        "note": ""
+    },
+    "old-ec2-servers": {
+        "key": "/path/to/key",
+        "note": "Old keys from 8-2-13"
+    },
+    "hiram": {
+        "key": "/home/moose/.ssh/id_rsa",
+        "note": ""
+    }
 }
-
 
 ## How to use
 
