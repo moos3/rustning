@@ -1,15 +1,15 @@
-rustning
+Rustning
 ========
 
-rustning armor for you ssh keys
+Rustning is for managing your private ssh keys
 
-rustning means Armor in Old Norse and Danish, German. This is a nice wrapper 
+Rustning means Armor in Old Norse and Danish, German. This is a nice wrapper 
 for the ssh-add command that 99.9% of people most likely don't even know about.
 
 
 ## Configuration
 .rustning.conf is a JSON file that has the following layout
-
+```
 {
     "ec2-servers": {
         "key": "/path/to/key",
@@ -24,9 +24,11 @@ for the ssh-add command that 99.9% of people most likely don't even know about.
         "note": ""
     }
 }
+```
 
 ## Usage
 
+```
 Usage: rustning <command> <args>
 
 Commands
@@ -41,10 +43,11 @@ list-keys
    - list all the keys setup for use
 add-note <hostname> <note>
    - add/update note to host entry
-
+```
 
 ## How to use
 
+```
 rustning grant-access ec2-servers
 loading key for ec2-servers
 
@@ -71,6 +74,7 @@ old-ec2-servers     old ec2 server keys that might still around
 hiram               my laptops ssh key
 forseti             my mac mini at home
 
+```
 
 ## Future Additions
 * Reverse ssh tunneling / Management of Tunnels

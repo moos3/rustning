@@ -61,7 +61,7 @@ function grantAccess($option){
             if (file_exists($value['key'])){
                 exec("ssh-add ".$values['key']);
             } else {
-                echo "Failed to load key for ".$host." the key file is missing.".PHP_EOL;
+                echo "\t\t!!!! Failed to load key for ".$host.", the key file is missing.".PHP_EOL;
             }
         }
     } else {
@@ -70,7 +70,7 @@ function grantAccess($option){
             if (file_exists($keys[$option]['key'])){
                 exec("ssh-add ".$keys[$option]['key']);
             } else {
-                die("Key file for the host ".$option." does not exist".PHP_EOL);
+                die("!!! Key file for the host ".$option." does not exist".PHP_EOL);
             }
         } else {
             die("Theres no host in the configuration file that matches that hostname".PHP_EOL);
