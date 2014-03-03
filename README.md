@@ -6,6 +6,8 @@ Rustning is for managing your private ssh keys
 Rustning means Armor in Old Norse and Danish, German. This is a nice wrapper 
 for the ssh-add command that 99.9% of people most likely don't even know about.
 
+## Requirements
+**MUST HAVE PHP 5.3+**
 
 ## Configuration
 .rustning.conf is a JSON file that has the following layout
