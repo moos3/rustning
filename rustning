@@ -53,12 +53,12 @@ function listKeys(){
     exit;
 }
 
-function grantAccess($option){
+function grantAccess($option=false){
     global $keys;
     if ($option == 'all'){
         foreach ($keys as $host => $values){
             echo "loading key for ".$host.PHP_EOL;
-            if (file_exists($value['key'])){
+            if (file_exists($values['key'])){
                 exec("ssh-add ".$values['key']);
             } else {
                 echo "\t\t!!!! Failed to load key for ".$host.", the key file is missing.".PHP_EOL;
@@ -127,7 +127,7 @@ if ($command != "setup"){
 switch ($command) {
 
     case "grant-access":
-        grantAccess();
+        grantAccess($host);
         break;
     
     case "add-key":
