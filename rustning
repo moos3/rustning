@@ -106,7 +106,7 @@ function usage(){
     echo "   - accepts all or single hostname".PHP_EOL;
     echo "add-key <hostname> <path-to-key>".PHP_EOL;
     echo "   - adds host and key to the rustning configuration files".PHP_EOL;
-    echo "del-key <hostname>".PHP_EOL; 
+    echo "del-key <hostname>".PHP_EOL;
     echo "   - remove key from rustning configuration file".PHP_EOL;
     echo "list-keys".PHP_EOL;
     echo "   - list all the keys setup for use".PHP_EOL;
@@ -129,7 +129,7 @@ switch ($command) {
     case "grant-access":
         grantAccess($host);
         break;
-    
+
     case "add-key":
         addKey($host,$option);
         break;
